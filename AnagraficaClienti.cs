@@ -52,6 +52,25 @@ namespace ErpDemo
         {
             ChangeFieldsState();
         }
+        public override bool OnDelete()
+        {
+            bool bOk = true;
+            if (MessageBox.Show("Confermi eliminazione?",
+                "Elimina",
+                MessageBoxButtons.OKCancel,
+                MessageBoxIcon.Exclamation) == DialogResult.OK)
+                bOk = true;
+            else
+                bOk = false;
+
+            if(bOk)
+            {
+                // fai qualcosa
+
+            }
+
+            return bOk;
+        }
         public override bool OnSave()
         {
             bool bOk = true;

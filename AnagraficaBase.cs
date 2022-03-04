@@ -43,7 +43,7 @@ namespace ErpDemo
         }
         virtual public void OnNew() { }
         virtual public void OnEdit() { }
-        virtual public void OnDelete() { }
+        virtual public bool OnDelete() { return true; }
         virtual public void OnFirst() { }
         virtual public void OnBack() { }
         virtual public void OnNext() { }
