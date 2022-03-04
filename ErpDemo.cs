@@ -63,7 +63,7 @@ namespace ErpDemo
             {
                 if (elem.DOCUMENT_MODE != _DOC_MODE.BROWSE)
                 {
-                    MessageBox.Show("DOcumento aperto impossibile chiudere.");
+                    MessageBox.Show("Documento aperto impossibile chiudere.");
                     e.Cancel = true;
                     break;
                 }
