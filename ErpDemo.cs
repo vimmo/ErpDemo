@@ -31,6 +31,7 @@ namespace ErpDemo
                 AnagraficaClienti cli = new AnagraficaClienti();
                 cli.MdiParent = this;
                 cli.Show();
+                //commento
             }
         }
 
