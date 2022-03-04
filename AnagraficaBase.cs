@@ -105,5 +105,14 @@ namespace ErpDemo
             if (OnCancel())
                 DOCUMENT_MODE = _DOC_MODE.BROWSE;
         }
+
+        private void AnagraficaBase_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (DOCUMENT_MODE != _DOC_MODE.BROWSE)
+            {
+                MessageBox.Show("Documento aperto impossibile chiudere.");
+                e.Cancel = true;
+            }
+        }
     }
 }

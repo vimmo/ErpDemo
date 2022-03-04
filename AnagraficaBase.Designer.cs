@@ -141,6 +141,7 @@ namespace ErpDemo
             this.MainMenuStrip = this.anagraficaMenuStrip;
             this.Name = "AnagraficaBase";
             this.Text = "AnagraficaBase";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AnagraficaBase_FormClosing);
             this.anagraficaMenuStrip.ResumeLayout(false);
             this.anagraficaMenuStrip.PerformLayout();
             this.ResumeLayout(false);
