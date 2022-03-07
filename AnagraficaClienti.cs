@@ -81,8 +81,9 @@ namespace ErpDemo
 
             if(bOk)
             {
+               Clienti cliente = _dbClientiService.FindCliente(1009);
                 // fai qualcosa
-
+                _dbClientiService.DeleteCliente(cliente);
             }
 
             return bOk;
@@ -104,6 +105,24 @@ namespace ErpDemo
                 MessageBoxButtons.OKCancel,
                 MessageBoxIcon.Question) == DialogResult.Cancel)
                 bOk = false;
+
+            if (bOk)
+            {
+                // fai qualcosa
+                var cliente = new Clienti
+                {
+                    Id = DOCUMENT_MODE == _DOC_MODE.NEW ? 0 : Convert.ToInt32(txtId.Text),
+                    RagioneSociale = txtRagioneSociale.Text,
+                    Indirizzo = txtIndirizzo.Text,
+                    Città = txtCitta.Text,
+                    IsFornitore = false
+                };
+
+                if (DOCUMENT_MODE == _DOC_MODE.NEW)
+                    _dbClientiService.PostCliente(cliente);
+                else
+                    _dbClientiService.PutCliente(cliente);
+            }
             if (bOk)
                 ChangeFieldsState(false);
 
