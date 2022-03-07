@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ErpDemoEF.Models;
+using ErpDemoEF.Services;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,12 +14,15 @@ namespace ErpDemo
 {
     public partial class AnagraficaClienti : AnagraficaBase
     {
+        private readonly DBClientiService _dbClientiService;
         public AnagraficaClienti()
         {
             InitializeComponent();
             txtId.Enabled = false;
             ChangeFieldsState();
+            _dbClientiService = new DBClientiService();
         }
+
         private void ChangeFieldsState()
         {
             txtRagioneSociale.Enabled = (DOCUMENT_MODE != _DOC_MODE.BROWSE);
@@ -25,6 +30,7 @@ namespace ErpDemo
             txtCitta.Enabled = (DOCUMENT_MODE != _DOC_MODE.BROWSE);
             txtSettore.Enabled = (DOCUMENT_MODE != _DOC_MODE.BROWSE);
         }
+
         private void ChangeFieldsState(bool setReadOnly)
         {
             txtRagioneSociale.Enabled = setReadOnly;
@@ -32,6 +38,7 @@ namespace ErpDemo
             txtCitta.Enabled = setReadOnly;
             txtSettore.Enabled = setReadOnly;
         }
+
         private void ClearData()
         {
             txtId.Clear();
@@ -41,10 +48,19 @@ namespace ErpDemo
             txtSettore.Clear();
             lblRagSoc.ForeColor = Color.Black;
         }
+
         public override void OnNew()
         {
             ChangeFieldsState();
             ClearData();
+
+            IEnumerable<Clienti> a = _dbClientiService.GetClienti();
+
+            foreach(Clienti clienti in a)
+            {
+                MessageBox.Show(clienti.RagioneSociale);
+            }
+
         }
 
 
