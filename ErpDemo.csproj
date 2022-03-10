@@ -8,6 +8,10 @@
     <RootNamespace>ErpDemo</RootNamespace>
     <AssemblyName>ErpDemo</AssemblyName>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ErpDemoEF\ErpDemoEF.csproj" />
+  </ItemGroup>
   <ItemGroup>
     <Compile Update="AnagraficaArticoli.cs">
       <SubType>Form</SubType>

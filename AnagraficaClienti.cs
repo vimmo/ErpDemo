@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ErpDemoEF.Models;
+using ErpDemoEF.Services;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,11 +14,13 @@ namespace ErpDemo
 {
     public partial class AnagraficaClienti : AnagraficaBase
     {
+        private readonly DBClientiService _dbClientiService;
         public AnagraficaClienti()
         {
             InitializeComponent();
             txtId.Enabled = false;
             ChangeFieldsState();
+            _dbClientiService = new DBClientiService();
         }
         private void ChangeFieldsState()
         {
@@ -51,6 +55,13 @@ namespace ErpDemo
         public override void OnEdit()
         {
             ChangeFieldsState();
+            //txtId.Text = Convert.ToString(9);
+            //List<Clienti> listaClienti = _dbClientiService.GetClientiList().ToList();
+
+            //foreach(Clienti ele in listaClienti)
+            //{
+            //    MessageBox.Show(ele.RagioneSociale);
+            //}
         }
         public override bool OnDelete()
         {
@@ -75,7 +86,7 @@ namespace ErpDemo
         {
             bool bOk = true;
 
-            if(txtRagioneSociale.Text =="")
+            if (txtRagioneSociale.Text == "")
             {
                 MessageBox.Show("Ragione sociale obbligatoria");
                 txtRagioneSociale.Focus();
@@ -88,8 +99,42 @@ namespace ErpDemo
                 MessageBoxButtons.OKCancel,
                 MessageBoxIcon.Question) == DialogResult.Cancel)
                 bOk = false;
+
+            if (bOk)
+            {
+                //int a = 0;
+                //if (DOCUMENT_MODE != _DOC_MODE.NEW)
+                //    a = Convert.ToInt32(txtId.Text);
+
+                var cliente = new Clienti
+                {
+                    //Id = a,
+                    Id = DOCUMENT_MODE == _DOC_MODE.NEW ? 0 : Convert.ToInt32(txtId.Text),
+                    RagioneSociale = txtRagioneSociale.Text,
+                    Citta = txtCitta.Text,
+                    Indirizzo = txtIndirizzo.Text,
+                    Settore = txtSettore.Text
+                };
+                Clienti val = null;
+                if (DOCUMENT_MODE == _DOC_MODE.NEW)
+                    _dbClientiService.CreaCliente(cliente);
+                else
+                    _dbClientiService.ModificaCliente(cliente);
+                
+                txtId.Text = val.Id.ToString();
+                if (txtId.Text == "")
+                    bOk = false;
+            }
+
+
             if (bOk)
                 ChangeFieldsState(false);
+            else
+                MessageBox.Show(
+                    "Errore in " + (DOCUMENT_MODE == _DOC_MODE.NEW ? "inserimento" : "modifica"),
+                    "Errore",
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error);
 
             return bOk;
         }
