@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ErpDemoEF.Models;
+using ErpDemoEF.Services;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,11 +14,14 @@ namespace ErpDemo
 {
     public partial class AnagraficaClienti : AnagraficaBase
     {
+        private readonly DBClientiService _db;
         public AnagraficaClienti()
         {
             InitializeComponent();
             txtId.Enabled = false;
             ChangeFieldsState();
+
+            _db = new DBClientiService();
         }
         private void ChangeFieldsState()
         {
@@ -46,8 +51,6 @@ namespace ErpDemo
             ChangeFieldsState();
             ClearData();
         }
-
-
         public override void OnEdit()
         {
             ChangeFieldsState();
@@ -66,7 +69,15 @@ namespace ErpDemo
             if(bOk)
             {
                 // fai qualcosa
-
+                var cliente = new Clienti
+                {
+                    Id = Convert.ToInt32(txtId.Text),
+                    RagioneSociale = txtRagioneSociale.Text,
+                    Indirizzo = txtIndirizzo.Text,
+                    Citta = txtCitta.Text,
+                    Settore = txtSettore.Text
+                };
+                bOk = _db.EliminaCliente(cliente);
             }
 
             return bOk;
@@ -91,7 +102,25 @@ namespace ErpDemo
 
             if (bOk)
             {
-
+                var cliente = new Clienti
+                {
+                    Id = DOCUMENT_MODE == _DOC_MODE.NEW ? 0 : Convert.ToInt32(txtId.Text),
+                    RagioneSociale = txtRagioneSociale.Text,
+                    Indirizzo = txtIndirizzo.Text,
+                    Citta = txtCitta.Text,
+                    Settore = txtSettore.Text
+                };
+                if (DOCUMENT_MODE == _DOC_MODE.NEW)
+                {
+                    Clienti cli = _db.CreaCliente(cliente);
+                    txtId.Text = cli.Id.ToString();
+                    bOk = txtId.Text != "";
+                }
+                else
+                {
+                    bOk = _db.ModificaCliente(cliente);
+                }
+                
             }
 
 
@@ -123,6 +152,26 @@ namespace ErpDemo
             }
             return bOk;
         }
+
+        public override void OnFirst()
+        {
+            RiempiCampi(_db.LeggiCliente(false));
+        }
+        public override void OnLast()
+        {
+            RiempiCampi(_db.LeggiCliente(true));
+        }
+
+        private void RiempiCampi(Clienti cliente)
+        {
+            txtId.Text = cliente.Id.ToString();
+            txtRagioneSociale.Text = cliente.RagioneSociale;
+            txtIndirizzo.Text = cliente.Indirizzo;
+            txtCitta.Text = cliente.Citta;
+            txtSettore.Text = cliente.Settore;
+        }
+
+
 
         private void txtRagioneSociale_Leave(object sender, EventArgs e)
         {
